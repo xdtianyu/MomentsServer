@@ -1,13 +1,13 @@
 # MomentsServer
 MomentsServer is server side for moment, it's still under development.
 
-# Dependencies
+**Dependencies**
 
     pip3 install PyMySQL
     pip3 install flask
     pip3 install Flask-SQLAlchemy
 
-# Create mysql database and import test data
+**Create mysql database and import test data**
 
 1\. Login to your MYSQL console.
 
