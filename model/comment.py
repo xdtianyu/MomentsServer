@@ -6,7 +6,7 @@ __author__ = 'ty'
 
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    sender = db.Column(db.Integer, nulable=False)
+    sender = db.Column(db.Integer, nullable=False)
     content = db.Column(db.Text)
 
     def __init__(self, sender, content):

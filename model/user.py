@@ -9,9 +9,10 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(128), unique=True, nullable=False)
     email = db.Column(db.String(128), unique=True, nullable=False)
+    password = db.Column(db.Text, nullable=False)
     nick = db.Column(db.String(128))
-    avatar = db.Column(db.String(128))
-    profile_image = db.Column(db.String(128))
+    avatar = db.Column(db.String(256))
+    profile_image = db.Column(db.String(256))
 
     def __init__(self, username, email):
         self.username = username
@@ -21,4 +22,10 @@ class User(db.Model):
         return '<User %r>' % self.username
 
     def json(self):
-        return json.dumps(self, default=lambda o: o.__dict__, ensure_ascii=False)
+        user = {
+            'username': self.username,
+            'nick': self.nick,
+            'avatar': self.avatar,
+            'profile-image': self.profile_image
+        }
+        return json.jsonify(user)
