@@ -1,4 +1,6 @@
-from flask import Flask, request, json
+from json import dumps
+
+from flask import Flask, request, json, make_response
 from model.comment import Comment
 from model.database import db
 from model.image import Image
@@ -36,6 +38,20 @@ def log_the_user_in(username):
     return "Welcome %s" % username
 
 
+def jsonify(status=200, indent=4, sort_keys=True, **kwargs):
+    res = make_response(dumps(dict(**kwargs), indent=indent, sort_keys=sort_keys, ensure_ascii=False))
+    res.headers['Content-Type'] = 'application/json; charset=utf-8'
+    res.status_code = status
+    return res
+
+
+def response_json(status=200, json_dumps=None):
+    res = make_response(json_dumps)
+    res.headers['Content-Type'] = 'application/json; charset=utf-8'
+    res.status_code = status
+    return res
+
+
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -55,13 +71,23 @@ def show_user_profile(username):
     if user:
         return user.json()
     else:
-        return json.jsonify(error="No such user: %s" % username)
+        return jsonify(error="No such user: %s" % username)
 
 
 @app.route("/user/<username>/tweets")
 def show_user_tweets(username):
+    user = User.query.filter_by(username=username).first()
 
-    return "%s tweets" % username
+    if user:
+        tweets = Tweet.query.filter_by(sender=user.id).all()
+        # return dumps([tweet.serialized() for tweet in tweets], ensure_ascii=False)
+
+        # return jsonify(tweets=[tweet.serialized() for tweet in tweets])
+        return response_json(
+            json_dumps=dumps([tweet.serialized() for tweet in tweets], ensure_ascii=False, sort_keys=True, indent=2,
+                             separators=(',', ': ')))
+    else:
+        return jsonify(error="No such user: %s" % username)
 
 
 @app.route("/user/<username>/friends")

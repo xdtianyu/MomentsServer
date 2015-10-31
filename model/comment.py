@@ -1,5 +1,6 @@
 from flask import json
 from model.database import db
+from model.user import dump_sender
 
 __author__ = 'ty'
 
@@ -18,3 +19,21 @@ class Comment(db.Model):
 
     def json(self):
         return json.dumps(self, default=lambda o: o.__dict__, ensure_ascii=False)
+
+    def serialized(self):
+        comment = {"sender": dump_sender(self.sender)}
+        if self.content:
+            comment["content"] = self.content
+
+        return comment
+
+
+def dump_comments(comment_string):
+    comment_ids = comment_string.split(',')
+    comments = []
+    for comment_id in comment_ids:
+        comment = Comment.query.filter_by(id=comment_id).first()
+        if comment:
+            comments.append(comment.serialized())
+
+    return comments

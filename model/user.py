@@ -29,3 +29,23 @@ class User(db.Model):
             'profile-image': self.profile_image
         }
         return json.jsonify(user)
+
+    def sender(self):
+        user = {
+            'username': self.username,
+            'nick': self.nick,
+            'avatar': self.avatar
+        }
+        return json.jsonify(user)
+
+    def serialized(self):
+        return {
+            'username': self.username,
+            'nick': self.nick,
+            'avatar': self.avatar
+        }
+
+
+def dump_sender(user_id):
+    user = User.query.filter_by(id=user_id).first()
+    return user.serialized()
