@@ -16,3 +16,17 @@ class Image(db.Model):
 
     def json(self):
         return json.dumps(self, default=lambda o: o.__dict__, ensure_ascii=False)
+
+    def serialized(self):
+        return {"url": self.url}
+
+
+def dump_images(image_string):
+    image_ids = image_string.split(',')
+    images = []
+    for image_id in image_ids:
+        image = Image.query.filter_by(id=image_id).first()
+        if image:
+            images.append(image.serialized())
+
+    return images

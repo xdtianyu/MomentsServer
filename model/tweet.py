@@ -1,6 +1,7 @@
 from model.comment import dump_comments
 
 from model.database import db
+from model.image import dump_images
 from model.user import dump_sender
 
 __author__ = 'ty'
@@ -27,6 +28,6 @@ class Tweet(db.Model):
         if self.comments:
             tweet["comments"] = dump_comments(self.comments)
         if self.images:
-            tweet["images"] = self.images
+            tweet["images"] = dump_images(self.images)
 
         return tweet
