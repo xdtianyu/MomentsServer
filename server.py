@@ -87,6 +87,15 @@ def show_user_tweets(username):
         return jsonify(error="No such user: %s" % username)
 
 
+@app.route("/user/<username>/friends")
+def show_user_friends(username):
+    user = User.query.filter_by(username=username).first()
+    if user:
+        return jsonify(friends=user.serialized_friends())
+    else:
+        return jsonify(error="No such user: %s" % username)
+
+
 @app.route("/tweet/post", methods=['POST'])
 def tweet_post():
     if request.method == 'POST':
@@ -114,13 +123,25 @@ def tweet_post():
             return jsonify(error="Error param")
 
 
-@app.route("/user/<username>/friends")
-def show_user_friends(username):
-    user = User.query.filter_by(username=username).first()
-    if user:
-        return jsonify(friends=user.serialized_friends())
-    else:
-        return jsonify(error="No such user: %s" % username)
+@app.route("/profile/update", methods=['POST'])
+def profile_update():
+    if request.method == 'POST':
+        username = request.form['username']
+        nick = request.form['nick']
+        avatar = request.form['avatar']
+        profile_image = request.form['profile_image']
+        if username:
+            user = User.query.filter_by(username=username).first()
+            if user:
+                user.nick = nick
+                user.avatar = avatar
+                user.profile_image = profile_image
+                db.session.commit()
+                return jsonify(message="200 OK")
+            else:
+                return jsonify(error="No such user: %s" % username)
+        else:
+            return jsonify(error="Error param")
 
 
 @app.route("/search/<keyword>")
@@ -130,4 +151,4 @@ def show_search_result(keyword):
 
 if __name__ == "__main__":
     WSGIRequestHandler.protocol_version = "HTTP/1.1"
-    app.run(debug=True, host='127.0.0.1', threaded=False)
+    app.run(debug=True, host='0.0.0.0', threaded=True)

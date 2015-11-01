@@ -26,7 +26,10 @@ class Comment(db.Model):
         return json.dumps(self, default=lambda o: o.__dict__, ensure_ascii=False)
 
     def serialized(self):
-        comment = {"sender": dump_sender(self.sender)}
+        comment = {
+            "id": self.id,
+            "sender": dump_sender(self.sender)
+        }
         if self.content:
             comment["content"] = self.content
 

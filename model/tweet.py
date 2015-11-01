@@ -27,7 +27,10 @@ class Tweet(db.Model):
         return '<Tweet %r>' % self.content
 
     def serialized(self):
-        tweet = {"sender": dump_sender(self.sender)}
+        tweet = {
+            "id": self.id,
+            "sender": dump_sender(self.sender)
+        }
         if self.content:
             tweet["content"] = self.content
         if self.comments:
