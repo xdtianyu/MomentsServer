@@ -79,12 +79,12 @@ def show_user_tweets(username):
     user = User.query.filter_by(username=username).first()
 
     if user:
-        tweets = Tweet.query.filter_by(sender=user.id).all()
-        # return dumps([tweet.serialized() for tweet in tweets], ensure_ascii=False)
 
-        # return jsonify(tweets=[tweet.serialized() for tweet in tweets])
+        # return dumps(user.serialized_tweets(), ensure_ascii=False)
+
+        # return jsonify(tweets=user.serialized_tweets())
         return response_json(
-            json_dumps=dumps([tweet.serialized() for tweet in tweets], ensure_ascii=False, sort_keys=True, indent=2,
+            json_dumps=dumps(user.serialized_tweets(), ensure_ascii=False, sort_keys=True, indent=2,
                              separators=(',', ': ')))
     else:
         return jsonify(error="No such user: %s" % username)

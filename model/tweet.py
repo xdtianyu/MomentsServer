@@ -31,3 +31,8 @@ class Tweet(db.Model):
             tweet["images"] = dump_images(self.images)
 
         return tweet
+
+
+def dump_tweets(user_id):
+    tweets = Tweet.query.filter_by(sender=user_id).all()
+    return [tweet.serialized() for tweet in tweets]

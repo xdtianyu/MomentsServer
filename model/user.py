@@ -49,6 +49,14 @@ class User(db.Model):
     def serialized_friends(self):
         return dump_friends(self.friends)
 
+    def serialized_tweets(self):
+        from model.tweet import dump_tweets
+
+        tweets = dump_tweets(self.id)
+        for friend_id in self.friends.split(','):
+            tweets.extend(dump_tweets(friend_id))
+        return tweets
+
 
 def dump_sender(user_id):
     user = User.query.filter_by(id=user_id).first()
