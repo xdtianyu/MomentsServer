@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: 2015-10-31 21:15:06
+-- Generation Time: 2015-11-01 19:32:28
 -- 服务器版本： 5.5.44-MariaDB-1ubuntu0.14.04.1
 -- PHP Version: 5.5.9-1ubuntu4.14
 
@@ -29,16 +29,20 @@ SET time_zone = "+00:00";
 CREATE TABLE `comment` (
   `id` int(11) NOT NULL,
   `sender` int(11) NOT NULL,
-  `content` text COLLATE utf8_unicode_ci
+  `content` text COLLATE utf8_unicode_ci,
+  `time_post` int(11) NOT NULL,
+  `time_update` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- 转存表中的数据 `comment`
 --
 
-INSERT INTO `comment` (`id`, `sender`, `content`) VALUES
-(1, 1, 'great'),
-(2, 1, '哈哈哈');
+INSERT INTO `comment` (`id`, `sender`, `content`, `time_post`, `time_update`) VALUES
+(1, 1, 'great', 1446353495, 1446355439),
+(2, 1, '哈哈哈', 1446352495, 1446355439),
+(4, 2, '哈哈哈', 1446376373, 1446376373),
+(5, 2, '哈哈哈哦哦哦', 1446376430, 1446376430);
 
 -- --------------------------------------------------------
 
@@ -58,7 +62,11 @@ CREATE TABLE `image` (
 INSERT INTO `image` (`id`, `url`) VALUES
 (1, 'http://theakiba.com/images/2013/03/4048_moepic1.png'),
 (2, 'http://i.imgur.com/DWs03lR.jpg'),
-(3, 'http://theakiba.com/images/2013/03/4048_moepic7.jpg');
+(3, 'http://theakiba.com/images/2013/03/4048_moepic7.jpg'),
+(6, 'https://openranka.files.wordpress.com/2013/06/31447949.jpg'),
+(7, 'http://img1.ak.crunchyroll.com/i/spire3/80e01e22da63d0a4a12791206a6784d21424538006_full.jpg'),
+(8, 'https://openranka.files.wordpress.com/2013/06/31447949.jpg'),
+(9, 'http://img1.ak.crunchyroll.com/i/spire3/80e01e22da63d0a4a12791206a6784d21424538006_full.jpg');
 
 -- --------------------------------------------------------
 
@@ -71,18 +79,24 @@ CREATE TABLE `tweet` (
   `sender` int(11) NOT NULL,
   `content` text COLLATE utf8_unicode_ci,
   `images` text COLLATE utf8_unicode_ci,
-  `comments` text COLLATE utf8_unicode_ci
+  `comments` text COLLATE utf8_unicode_ci,
+  `time_post` int(11) NOT NULL,
+  `time_update` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- 转存表中的数据 `tweet`
 --
 
-INSERT INTO `tweet` (`id`, `sender`, `content`, `images`, `comments`) VALUES
-(1, 2, '测试', NULL, NULL),
-(2, 1, 'testhahah哈哈哈', '1,2', NULL),
-(3, 2, '哈哈哈哈啊第三大三', '3', '1,2'),
-(4, 2, '的萨打算dadasdasda发萨福', '1,2,3', NULL);
+INSERT INTO `tweet` (`id`, `sender`, `content`, `images`, `comments`, `time_post`, `time_update`) VALUES
+(1, 2, '测试', NULL, NULL, 1446351495, 1446351495),
+(2, 1, 'testhahah哈哈哈', '1,2', NULL, 1446352495, 1446352495),
+(3, 2, '哈哈哈哈啊第三大三', '3', '1,2', 1446353395, 1446353395),
+(4, 2, '的萨打算dadasdasda发萨福', '1,2,3', NULL, 1446353495, 1446353495),
+(5, 1, 'test', NULL, NULL, 1446362639, 1446362639),
+(6, 1, '测试', NULL, NULL, 1446363118, 1446363118),
+(7, 1, '测试嗖嗖嗖嗖', '6,7', NULL, 1446363839, 1446363839),
+(8, 1, '测试嗖嗖啊的萨的萨阿斯顿萨', '8,9', '4,5', 1446363876, 1446363876);
 
 -- --------------------------------------------------------
 
@@ -97,16 +111,19 @@ CREATE TABLE `user` (
   `password` text COLLATE utf8_unicode_ci NOT NULL,
   `nick` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
   `avatar` varchar(256) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `profile_image` varchar(256) COLLATE utf8_unicode_ci DEFAULT NULL
+  `profile_image` varchar(256) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `friends` text COLLATE utf8_unicode_ci NOT NULL,
+  `time_register` int(11) NOT NULL,
+  `time_last_login` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- 转存表中的数据 `user`
 --
 
-INSERT INTO `user` (`id`, `username`, `email`, `password`, `nick`, `avatar`, `profile_image`) VALUES
-(1, 'tianyu', 'tianyu@xdty.org', '123456', 'ty', 'https://www.xdty.org/tianyu.pnh', 'https://www.xdty.org/bg.png'),
-(2, 'jsmith', 'jsmith@xdty.org', '123456', 'John Smith', 'http://info.thoughtworks.com/rs/thoughtworks2/images/glyph_badge.png', 'http://img2.findthebest.com/sites/default/files/688/media/images/Mingle_159902_i0.png');
+INSERT INTO `user` (`id`, `username`, `email`, `password`, `nick`, `avatar`, `profile_image`, `friends`, `time_register`, `time_last_login`) VALUES
+(1, 'tianyu', 'tianyu@xdty.org', '123456', 'tianyu', 'https://33.media.tumblr.com/avatar_85177c2ee2c6_128.png', 'http://theakiba.com/images/2013/03/4048_moepic1.png', '2', 1446351495, 1446351495),
+(2, 'jsmith', 'jsmith@xdty.org', '123456', 'John Smith', 'http://info.thoughtworks.com/rs/thoughtworks2/images/glyph_badge.png', 'http://img2.findthebest.com/sites/default/files/688/media/images/Mingle_159902_i0.png', '1', 1446352495, 1446352495);
 
 --
 -- Indexes for dumped tables
@@ -146,17 +163,17 @@ ALTER TABLE `user`
 -- 使用表AUTO_INCREMENT `comment`
 --
 ALTER TABLE `comment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- 使用表AUTO_INCREMENT `image`
 --
 ALTER TABLE `image`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- 使用表AUTO_INCREMENT `tweet`
 --
 ALTER TABLE `tweet`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- 使用表AUTO_INCREMENT `user`
 --
