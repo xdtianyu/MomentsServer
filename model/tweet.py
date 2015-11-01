@@ -26,6 +26,13 @@ class Tweet(db.Model):
     def __repr__(self):
         return '<Tweet %r>' % self.content
 
+    def add_comment(self, comment_id):
+        comment_ids = []
+        if self.comments:
+            comment_ids.extend(self.comments.split(','))
+        comment_ids.append(comment_id)
+        self.comments = ','.join(map(str, comment_ids))
+
     def serialized(self):
         tweet = {
             "id": self.id,

@@ -2,6 +2,7 @@ from json import dumps
 
 from flask import Flask, request, make_response
 from werkzeug.serving import WSGIRequestHandler
+from model.comment import Comment
 from model.database import db
 from model.image import Image
 from model.tweet import Tweet
@@ -119,6 +120,28 @@ def tweet_post():
                 return jsonify(message="200 OK")
             else:
                 return jsonify(error="No such user: %s" % username)
+        else:
+            return jsonify(error="Error param")
+
+
+@app.route("/comment/post", methods=['POST'])
+def comment_post():
+    if request.method == 'POST':
+        username = request.form['username']
+        content = request.form['content']
+        tweet_id = request.form['tweet_id']
+        if username:
+            user = User.query.filter_by(username=username).first()
+            tweet = Tweet.query.filter_by(id=tweet_id).first()
+            if user and tweet:
+                comment = Comment(user.id, content)
+                db.session.add(comment)
+                db.session.flush()
+                tweet.add_comment(comment.id)
+                db.session.commit()
+                return jsonify(message="200 OK")
+            else:
+                return jsonify(error="No such user: %s or no such tweet" % username)
         else:
             return jsonify(error="Error param")
 
