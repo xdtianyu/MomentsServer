@@ -1,10 +1,7 @@
 from json import dumps
 
-from flask import Flask, request, json, make_response
-from model.comment import Comment
+from flask import Flask, request, make_response
 from model.database import db
-from model.image import Image
-from model.tweet import Tweet
 from model.user import User
 
 __author__ = 'ty'

@@ -9,6 +9,8 @@ class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     sender = db.Column(db.Integer, nullable=False)
     content = db.Column(db.Text)
+    time_post = db.Column(db.Integer)
+    time_update = db.Column(db.Integer)
 
     def __init__(self, sender, content):
         self.sender = sender
@@ -29,11 +31,9 @@ class Comment(db.Model):
 
 
 def dump_comments(comment_string):
-    comment_ids = comment_string.split(',')
     comments = []
-    for comment_id in comment_ids:
-        comment = Comment.query.filter_by(id=comment_id).first()
-        if comment:
-            comments.append(comment.serialized())
+    if comment_string:
+        comment_ids = comment_string.split(',')
+        comments = Comment.query.filter(Comment.id.in_(comment_ids)).order_by(Comment.time_post.desc()).all()
 
-    return comments
+    return [comment.serialized() for comment in comments]

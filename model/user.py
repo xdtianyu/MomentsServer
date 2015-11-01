@@ -14,6 +14,8 @@ class User(db.Model):
     avatar = db.Column(db.String(256))
     profile_image = db.Column(db.String(256))
     friends = db.Column(db.Text)
+    time_register = db.Column(db.Integer)
+    time_last_login = db.Column(db.Integer)
 
     def __init__(self, username, email):
         self.username = username
@@ -52,10 +54,7 @@ class User(db.Model):
     def serialized_tweets(self):
         from model.tweet import dump_tweets
 
-        tweets = dump_tweets(self.id)
-        for friend_id in self.friends.split(','):
-            tweets.extend(dump_tweets(friend_id))
-        return tweets
+        return dump_tweets(self.id, self.friends)
 
 
 def dump_sender(user_id):

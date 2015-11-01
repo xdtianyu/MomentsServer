@@ -1,5 +1,4 @@
 from model.comment import dump_comments
-
 from model.database import db
 from model.image import dump_images
 from model.user import dump_sender
@@ -13,6 +12,8 @@ class Tweet(db.Model):
     content = db.Column(db.Text)
     images = db.Column(db.Text)
     comments = db.Column(db.Text)
+    time_post = db.Column(db.Integer)
+    time_update = db.Column(db.Integer)
 
     def __init__(self, sender, content):
         self.sender = sender
@@ -33,6 +34,10 @@ class Tweet(db.Model):
         return tweet
 
 
-def dump_tweets(user_id):
-    tweets = Tweet.query.filter_by(sender=user_id).all()
+def dump_tweets(user_id, friends=None):
+    users = [user_id]
+    if friends:
+        users.extend(friends.split(','))
+
+    tweets = Tweet.query.filter(Tweet.sender.in_(users)).order_by(Tweet.time_post.desc()).all()
     return [tweet.serialized() for tweet in tweets]
