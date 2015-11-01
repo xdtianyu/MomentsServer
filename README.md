@@ -1,7 +1,7 @@
 # MomentsServer
 MomentsServer is server side for moment, it's still under development.
 
-**Dependencies**
+**Dependency**
 
     pip3 install PyMySQL
     pip3 install flask

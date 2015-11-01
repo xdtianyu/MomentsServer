@@ -13,6 +13,7 @@ class User(db.Model):
     nick = db.Column(db.String(128))
     avatar = db.Column(db.String(256))
     profile_image = db.Column(db.String(256))
+    friends = db.Column(db.Text)
 
     def __init__(self, username, email):
         self.username = username
@@ -45,7 +46,20 @@ class User(db.Model):
             'avatar': self.avatar
         }
 
+    def serialized_friends(self):
+        return dump_friends(self.friends)
+
 
 def dump_sender(user_id):
     user = User.query.filter_by(id=user_id).first()
     return user.serialized()
+
+
+def dump_friends(friends_string):
+    friends_ids = friends_string.split(',')
+    friends = []
+    for friend_id in friends_ids:
+        friend = User.query.filter_by(id=friend_id).first()
+        if friend:
+            friends.append(friend.serialized())
+    return friends

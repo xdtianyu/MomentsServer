@@ -92,7 +92,11 @@ def show_user_tweets(username):
 
 @app.route("/user/<username>/friends")
 def show_user_friends(username):
-    return "%s friends" % username
+    user = User.query.filter_by(username=username).first()
+    if user:
+        return jsonify(friends=user.serialized_friends())
+    else:
+        return jsonify(error="No such user: %s" % username)
 
 
 @app.route("/search/<keyword>")
