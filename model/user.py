@@ -1,4 +1,5 @@
 from flask import json
+import time
 
 from model.database import db
 
@@ -20,6 +21,8 @@ class User(db.Model):
     def __init__(self, username, email):
         self.username = username
         self.email = email
+        self.time_register = int(time.time())
+        self.time_last_login = self.time_register
 
     def __repr__(self):
         return '<User %r>' % self.username

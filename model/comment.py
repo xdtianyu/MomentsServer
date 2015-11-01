@@ -1,4 +1,5 @@
 from flask import json
+import time
 from model.database import db
 from model.user import dump_sender
 
@@ -15,6 +16,8 @@ class Comment(db.Model):
     def __init__(self, sender, content):
         self.sender = sender
         self.content = content
+        self.time_post = int(time.time())
+        self.time_update = self.time_post
 
     def __repr__(self):
         return '<Comment %r>' % self.content

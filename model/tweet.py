@@ -1,3 +1,4 @@
+import time
 from model.comment import dump_comments
 from model.database import db
 from model.image import dump_images
@@ -15,9 +16,12 @@ class Tweet(db.Model):
     time_post = db.Column(db.Integer)
     time_update = db.Column(db.Integer)
 
-    def __init__(self, sender, content):
+    def __init__(self, sender, content=None, images=None):
         self.sender = sender
         self.content = content
+        self.images = images
+        self.time_post = int(time.time())
+        self.time_update = self.time_post
 
     def __repr__(self):
         return '<Tweet %r>' % self.content

@@ -1,7 +1,10 @@
 from json import dumps
 
 from flask import Flask, request, make_response
+from werkzeug.serving import WSGIRequestHandler
 from model.database import db
+from model.image import Image
+from model.tweet import Tweet
 from model.user import User
 
 __author__ = 'ty'
@@ -76,15 +79,39 @@ def show_user_tweets(username):
     user = User.query.filter_by(username=username).first()
 
     if user:
-
-        # return dumps(user.serialized_tweets(), ensure_ascii=False)
-
         # return jsonify(tweets=user.serialized_tweets())
         return response_json(
             json_dumps=dumps(user.serialized_tweets(), ensure_ascii=False, sort_keys=True, indent=2,
                              separators=(',', ': ')))
     else:
         return jsonify(error="No such user: %s" % username)
+
+
+@app.route("/tweet/post", methods=['POST'])
+def tweet_post():
+    if request.method == 'POST':
+        username = request.form['username']
+        content = request.form['content']
+        images = request.form.getlist('images[]')
+        if username:
+            user = User.query.filter_by(username=username).first()
+            if user:
+                tweet = Tweet(user.id, content)
+                image_ids = []
+                if images:
+                    for img in images:
+                        image = Image(img)
+                        db.session.add(image)
+                        db.session.flush()
+                        image_ids.append(image.id)
+                tweet.images = ','.join(map(str, image_ids))
+                db.session.add(tweet)
+                db.session.commit()
+                return jsonify(message="200 OK")
+            else:
+                return jsonify(error="No such user: %s" % username)
+        else:
+            return jsonify(error="Error param")
 
 
 @app.route("/user/<username>/friends")
@@ -102,4 +129,5 @@ def show_search_result(keyword):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    WSGIRequestHandler.protocol_version = "HTTP/1.1"
+    app.run(debug=True, host='127.0.0.1', threaded=False)
