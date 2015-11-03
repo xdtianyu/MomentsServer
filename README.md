@@ -1,5 +1,5 @@
 # MomentsServer
-MomentsServer is server side of [Moments](https://github.com/xdtianyu/Moments), it's still under development.
+[MomentsServer](https://github.com/xdtianyu/MomentsServer) is server side of [Moments](https://github.com/xdtianyu/Moments), it's still under development.
 
 Dependencies
 -------
