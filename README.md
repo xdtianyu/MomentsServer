@@ -1,7 +1,8 @@
 # MomentsServer
-MomentsServer is server side for moment, it's still under development.
+MomentsServer is server side of [Moments](https://github.com/xdtianyu/Moments), it's still under development.
 
-**Dependency**
+Dependencies
+-------
 
     pip3 install PyMySQL
     pip3 install flask
@@ -22,7 +23,8 @@ MomentsServer is server side for moment, it's still under development.
     use moments;
     source sql/moments.sql;
 
-**Deployment**
+Deployment
+-------
 
 1\. Using `python3` command line
 
@@ -49,4 +51,16 @@ Add the following lines to your nginx site config
        include uwsgi_params;
        uwsgi_pass unix:/run/uwsgi/app/moments/socket;
     }
+```
+
+LICENSE
+-------
+
+```
+                    GNU GENERAL PUBLIC LICENSE
+                       Version 3, 29 June 2007
+
+ Copyright (C) 2007 Free Software Foundation, Inc. <http://fsf.org/>
+ Everyone is permitted to copy and distribute verbatim copies
+ of this license document, but changing it is not allowed.
 ```
